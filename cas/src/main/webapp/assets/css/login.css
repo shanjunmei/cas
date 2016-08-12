@@ -1,0 +1,19 @@
+@charset "utf-8";
+/* CSS Document */
+*{ margin:0; padding:0;}
+body{ background:#0a5d8f url(../img/loginbg.png) center center no-repeat; font-family:"微软雅黑"; font-size:12px;}
+.loginbody{ position:absolute; top:50%; left:50%; width:360px; margin:-220px 0 0 -180px; height:386px;}
+.loginbody .logo{ text-align:center; height:108px;}
+.loginbody .content{ background:url(../img/loginbg2.png) repeat-x; height:278px; color:#2aa1eb; padding:0 30px; font-size:16px;}
+.loginbody .content .form-title{ font-size:22px; font-weight:normal; text-align:center; height:50px; line-height:50px; padding:15px 0 0 0;}
+.loginbody .content .btn{ float:right; background:#f39451; border:none; font-size:18px; color:#FFF; width:100px; height:36px; line-height:36px; cursor:pointer;}
+.input1,.input2{ background:#FFF; border:none; height:30px; line-height:30px; width:300px; color:#0a5a8b; text-indent:30px;}
+.input1{ background:#FFF url(../img/ico1.jpg) 7px 5px no-repeat;}
+.input2{ background:#FFF url(../img/ico2.jpg) 7px 5px no-repeat;}
+.loginbody .content .control-label{ display:block; color:#e2492d; padding:0 0 5px 0; font-size:12px;}
+.loginbody .content .form-group{ padding:15px 0 0 0;}
+
+.alert-danger { border:1px solid #ebccd1; display:none; background-color: #f2dede;color: #a94442;padding: 6px;}
+.form-actions{ padding:18px 0 0 0; overflow:hidden;}
+
+.copyright{ position:absolute; bottom:20px; left:0; right:0; text-align:center; color:#FFF; font-size:14px;}
