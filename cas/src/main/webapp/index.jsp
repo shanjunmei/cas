@@ -18,7 +18,7 @@
     under the License.
 
 --%>
-<%@ page language="java"  session="false" %>
+<%@ page language="java" session="false" %>
 <%--
   ~ Licensed to Jasig under one or more contributor license
   ~ agreements. See the NOTICE file distributed with this work
@@ -39,6 +39,6 @@
   --%>
 
 <%
-final String queryString = request.getQueryString();
-final String url = request.getContextPath() + "/login" + (queryString != null ? "?" + queryString : "");
-response.sendRedirect(response.encodeURL(url));%>
+    final String queryString = request.getQueryString();
+    final String url = request.getContextPath() + "/login" + (queryString != null ? "?" + queryString : "");
+    response.sendRedirect(response.encodeURL(url));%>

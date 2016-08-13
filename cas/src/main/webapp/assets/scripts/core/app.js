@@ -1,6 +1,6 @@
 /**
-Core script to handle the entire theme and core functions
-**/
+ Core script to handle the entire theme and core functions
+ **/
 var App = function () {
 
     // IE mode
@@ -45,23 +45,23 @@ var App = function () {
             isRTL = true;
         }
 
-        isIE8 = !! navigator.userAgent.match(/MSIE 8.0/);
-        isIE9 = !! navigator.userAgent.match(/MSIE 9.0/);
-        isIE10 = !! navigator.userAgent.match(/MSIE 10.0/);
+        isIE8 = !!navigator.userAgent.match(/MSIE 8.0/);
+        isIE9 = !!navigator.userAgent.match(/MSIE 9.0/);
+        isIE10 = !!navigator.userAgent.match(/MSIE 10.0/);
 
         if (isIE10) {
             jQuery('html').addClass('ie10'); // detect IE10 version
         }
-        
+
         if (isIE10 || isIE9 || isIE8) {
             jQuery('html').addClass('ie'); // detect IE10 version
         }
 
         /*
-          Virtual keyboards:
-          Also, note that if you're using inputs in your modal – iOS has a rendering bug which doesn't 
-          update the position of fixed elements when the virtual keyboard is triggered  
-        */
+         Virtual keyboards:
+         Also, note that if you're using inputs in your modal – iOS has a rendering bug which doesn't
+         update the position of fixed elements when the virtual keyboard is triggered
+         */
         var deviceAgent = navigator.userAgent.toLowerCase();
         if (deviceAgent.match(/(iphone|ipod|ipad)/)) {
             $(document).on('focus', 'input, textarea', function () {
@@ -156,11 +156,11 @@ var App = function () {
             } else {
                 height = sidebar.height() + 20;
                 var headerHeight = $('.header').outerHeight();
-                var footerHeight = $('.footer').outerHeight();                
-                if ($(window).width() > 1024 && (height + headerHeight + footerHeight)  < $(window).height()) {
+                var footerHeight = $('.footer').outerHeight();
+                if ($(window).width() > 1024 && (height + headerHeight + footerHeight) < $(window).height()) {
                     height = $(window).height() - headerHeight - footerHeight;
                 }
-            }            
+            }
             if (height >= content.height()) {
                 content.attr('style', 'min-height:' + height + 'px !important');
             }
@@ -192,7 +192,7 @@ var App = function () {
             parent.children('li.open').children('a').children('.arrow').removeClass('open');
             parent.children('li.open').children('.sub-menu:not(.always-open)').slideUp(200);
             parent.children('li.open').removeClass('open');
-            
+
             var slideOffeset = -200;
 
             if (sub.is(":visible")) {
@@ -246,7 +246,7 @@ var App = function () {
             $(this).parents('li').addClass('active');
 
             App.startPageLoading();
-            
+
             if ($(window).width() <= 991 && $('.page-sidebar').hasClass("in")) {
                 $('.navbar-toggle').click();
             }
@@ -279,7 +279,7 @@ var App = function () {
             var pageContentBody = $('.page-content .page-content-body');
 
             App.startPageLoading();
-            
+
             if ($(window).width() <= 991 && $('.page-sidebar').hasClass("in")) {
                 $('.navbar-toggle').click();
             }
@@ -503,7 +503,7 @@ var App = function () {
         });
 
         //handle tab click
-        $('.header').on('click', '.hor-menu a[data-toggle="tab"]', function (e) {     
+        $('.header').on('click', '.hor-menu a[data-toggle="tab"]', function (e) {
             e.preventDefault();
             var nav = $(".hor-menu .nav");
             var active_link = nav.find('li.current');
@@ -557,13 +557,11 @@ var App = function () {
                     cache: false,
                     url: url,
                     dataType: "html",
-                    success: function(res) 
-                    {                        
+                    success: function (res) {
                         App.unblockUI(el);
                         el.html(res);
                     },
-                    error: function(xhr, ajaxOptions, thrownError)
-                    {
+                    error: function (xhr, ajaxOptions, thrownError) {
                         App.unblockUI(el);
                         var msg = 'Error on reloading the content. Please check your connection and try again.';
                         if (error == "toastr" && toastr) {
@@ -582,7 +580,7 @@ var App = function () {
                 window.setTimeout(function () {
                     App.unblockUI(el);
                 }, 1000);
-            }            
+            }
         });
 
         // load ajax data on page init
@@ -641,10 +639,10 @@ var App = function () {
         //activate tab if tab id provided in the URL
         if (location.hash) {
             var tabid = location.hash.substr(1);
-            $('a[href="#' + tabid + '"]').parents('.tab-pane:hidden').each(function(){
+            $('a[href="#' + tabid + '"]').parents('.tab-pane:hidden').each(function () {
                 var tabid = $(this).attr("id");
-                $('a[href="#' + tabid + '"]').click();    
-            });            
+                $('a[href="#' + tabid + '"]').click();
+            });
             $('a[href="#' + tabid + '"]').click();
         }
     }
@@ -653,17 +651,17 @@ var App = function () {
     var handleModals = function () {
         // fix stackable modal issue: when 2 or more modals opened, closing one of modal will remove .modal-open class. 
         $('body').on('hide.bs.modal', function () {
-           if ($('.modal:visible').size() > 1 && $('html').hasClass('modal-open') == false) {
-              $('html').addClass('modal-open');
-           } else if ($('.modal:visible').size() <= 1) {
-              $('html').removeClass('modal-open');
-           }
+            if ($('.modal:visible').size() > 1 && $('html').hasClass('modal-open') == false) {
+                $('html').addClass('modal-open');
+            } else if ($('.modal:visible').size() <= 1) {
+                $('html').removeClass('modal-open');
+            }
         });
-            
+
         $('body').on('show.bs.modal', '.modal', function () {
             if ($(this).hasClass("modal-scroll")) {
                 $('body').addClass("modal-open-noscroll");
-            } 
+            }
         });
 
         $('body').on('hide.bs.modal', '.modal', function () {
@@ -673,14 +671,14 @@ var App = function () {
 
     // Handles Bootstrap Tooltips.
     var handleTooltips = function () {
-       jQuery('.tooltips').tooltip();
+        jQuery('.tooltips').tooltip();
     }
 
     // Handles Bootstrap Dropdowns
     var handleDropdowns = function () {
         /*
-          Hold dropdown on click  
-        */
+         Hold dropdown on click
+         */
         $('body').on('click', '.dropdown-menu.hold-on-click', function (e) {
             e.stopPropagation();
         });
@@ -692,7 +690,7 @@ var App = function () {
     }
 
     var handleAlerts = function () {
-        $('body').on('click', '[data-close="alert"]', function(e){
+        $('body').on('click', '[data-close="alert"]', function (e) {
             $(this).parent('.alert').hide();
             e.preventDefault();
         });
@@ -727,8 +725,8 @@ var App = function () {
             $(this).slimScroll({
                 allowPageScroll: true, // allow page scroll when the element scroll is ended
                 size: '7px',
-                color: ($(this).attr("data-handle-color")  ? $(this).attr("data-handle-color") : '#bbb'),
-                railColor: ($(this).attr("data-rail-color")  ? $(this).attr("data-rail-color") : '#eaeaea'),
+                color: ($(this).attr("data-handle-color") ? $(this).attr("data-handle-color") : '#bbb'),
+                railColor: ($(this).attr("data-rail-color") ? $(this).attr("data-rail-color") : '#eaeaea'),
                 position: isRTL ? 'left' : 'right',
                 height: height,
                 alwaysVisible: ($(this).attr("data-always-visible") == "1" ? true : false),
@@ -788,38 +786,38 @@ var App = function () {
     }
 
     // Handle full screen mode toggle
-    var handleFullScreenMode = function() {
+    var handleFullScreenMode = function () {
         // mozfullscreenerror event handler
-       
+
         // toggle full screen
         function toggleFullScreen() {
-          if (!document.fullscreenElement &&    // alternative standard method
-              !document.mozFullScreenElement && !document.webkitFullscreenElement) {  // current working methods
-            if (document.documentElement.requestFullscreen) {
-              document.documentElement.requestFullscreen();
-            } else if (document.documentElement.mozRequestFullScreen) {
-              document.documentElement.mozRequestFullScreen();
-            } else if (document.documentElement.webkitRequestFullscreen) {
-              document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+            if (!document.fullscreenElement &&    // alternative standard method
+                !document.mozFullScreenElement && !document.webkitFullscreenElement) {  // current working methods
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.mozRequestFullScreen) {
+                    document.documentElement.mozRequestFullScreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+            } else {
+                if (document.cancelFullScreen) {
+                    document.cancelFullScreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitCancelFullScreen) {
+                    document.webkitCancelFullScreen();
+                }
             }
-          } else {
-            if (document.cancelFullScreen) {
-              document.cancelFullScreen();
-            } else if (document.mozCancelFullScreen) {
-              document.mozCancelFullScreen();
-            } else if (document.webkitCancelFullScreen) {
-              document.webkitCancelFullScreen();
-            }
-          }
         }
 
-        $('#trigger_fullscreen').click(function() {
+        $('#trigger_fullscreen').click(function () {
             toggleFullScreen();
         });
     }
 
     // Handle Select2 Dropdowns
-    var handleSelect2 = function() {
+    var handleSelect2 = function () {
         if (jQuery().select2) {
             $('.select2me').select2({
                 placeholder: "Select",
@@ -840,18 +838,13 @@ var App = function () {
         $('.sidebar-option', panel).val("default");
         $('.header-option', panel).val("fixed");
         $('.footer-option', panel).val("default");
-        if ( $('.sidebar-pos-option').attr("disabled") === false) {
+        if ($('.sidebar-pos-option').attr("disabled") === false) {
             $('.sidebar-pos-option', panel).val(App.isRTL() ? 'right' : 'left');
         }
-        
+
         //handle theme layout
         var resetLayout = function () {
-            $("body").
-            removeClass("page-boxed").
-            removeClass("page-footer-fixed").
-            removeClass("page-sidebar-fixed").
-            removeClass("page-header-fixed").
-            removeClass("page-sidebar-reversed");
+            $("body").removeClass("page-boxed").removeClass("page-footer-fixed").removeClass("page-sidebar-fixed").removeClass("page-header-fixed").removeClass("page-sidebar-reversed");
 
             $('.header > .header-inner').removeClass("container");
 
@@ -965,7 +958,7 @@ var App = function () {
         var setColor = function (color) {
             var color_ = (App.isRTL() ? color + '-rtl' : color);
             $('#style_color').attr("href", "assets/css/themes/" + color_ + ".css");
-            if ($.cookie) {                
+            if ($.cookie) {
                 $.cookie('style_color', color);
             }
         }
@@ -1084,8 +1077,8 @@ var App = function () {
 
             if (el) {
                 if ($('body').hasClass('page-header-fixed')) {
-                    pos = pos - $('.header').height(); 
-                }            
+                    pos = pos - $('.header').height();
+                }
                 pos = pos + (offeset ? offeset : -1 * el.height());
             }
 
@@ -1104,18 +1097,18 @@ var App = function () {
             var options = $.extend(true, {}, options);
             var html = '';
             if (options.iconOnly) {
-                html = '<div class="loading-message ' + (options.boxed ? 'loading-message-boxed' : '')+'"><img style="" src="./assets/img/loading-spinner-grey.gif" align=""></div>';
+                html = '<div class="loading-message ' + (options.boxed ? 'loading-message-boxed' : '') + '"><img style="" src="./assets/img/loading-spinner-grey.gif" align=""></div>';
             } else if (options.textOnly) {
-                html = '<div class="loading-message ' + (options.boxed ? 'loading-message-boxed' : '')+'"><span>&nbsp;&nbsp;' + (options.message ? options.message : 'LOADING...') + '</span></div>';
-            } else {    
-                html = '<div class="loading-message ' + (options.boxed ? 'loading-message-boxed' : '')+'"><img style="" src="./assets/img/loading-spinner-grey.gif" align=""><span>&nbsp;&nbsp;' + (options.message ? options.message : 'LOADING...') + '</span></div>';
+                html = '<div class="loading-message ' + (options.boxed ? 'loading-message-boxed' : '') + '"><span>&nbsp;&nbsp;' + (options.message ? options.message : 'LOADING...') + '</span></div>';
+            } else {
+                html = '<div class="loading-message ' + (options.boxed ? 'loading-message-boxed' : '') + '"><img style="" src="./assets/img/loading-spinner-grey.gif" align=""><span>&nbsp;&nbsp;' + (options.message ? options.message : 'LOADING...') + '</span></div>';
             }
 
             if (options.target) { // element blocking
                 var el = jQuery(options.target);
                 if (el.height() <= ($(window).height())) {
                     options.cenrerY = true;
-                }            
+                }
                 el.block({
                     message: html,
                     baseZ: options.zIndex ? options.zIndex : 1000,
@@ -1128,7 +1121,7 @@ var App = function () {
                     },
                     overlayCSS: {
                         backgroundColor: options.overlayColor ? options.overlayColor : '#000',
-                        opacity: options.boxed ? 0.05 : 0.1, 
+                        opacity: options.boxed ? 0.05 : 0.1,
                         cursor: 'wait'
                     }
                 });
@@ -1147,7 +1140,7 @@ var App = function () {
                         cursor: 'wait'
                     }
                 });
-            }            
+            }
         },
 
         // wrapper function to  un-block element(finish loading)
@@ -1164,12 +1157,12 @@ var App = function () {
             }
         },
 
-        startPageLoading: function(message) {
+        startPageLoading: function (message) {
             $('.page-loading').remove();
             $('body').append('<div class="page-loading"><img src="assets/img/loading-spinner-grey.gif"/>&nbsp;&nbsp;<span>' + (message ? message : 'Loading...') + '</span></div>');
         },
 
-        stopPageLoading: function() {
+        stopPageLoading: function () {
             $('.page-loading').remove();
         },
 
@@ -1230,11 +1223,11 @@ var App = function () {
             }
         },
 
-        getUniqueID: function(prefix) {
+        getUniqueID: function (prefix) {
             return 'prefix_' + Math.floor(Math.random() * (new Date()).getTime());
         },
 
-        alert: function(options) {
+        alert: function (options) {
 
             options = $.extend(true, {
                 container: "", // alerts parent container(by default placed after the page breadcrumbs)
@@ -1250,9 +1243,10 @@ var App = function () {
 
             var id = App.getUniqueID("app_alert");
 
-            var html = '<div id="'+id+'" class="app-alerts alert alert-'+options.type+' fade in">' + (options.close ? '<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>' : '' ) + (options.icon != "" ? '<i class="fa-lg fa fa-'+options.icon + '"></i>  ' : '') + options.message+'</div>'
+            var html = '<div id="' + id + '" class="app-alerts alert alert-' + options.type + ' fade in">' + (options.close ? '<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>' : '' ) + (options.icon != "" ? '<i class="fa-lg fa fa-' + options.icon + '"></i>  ' : '') + options.message + '</div>'
 
-            if (options.reset) {0
+            if (options.reset) {
+                0
                 $('.app-alerts').remove();
             }
 
@@ -1271,7 +1265,7 @@ var App = function () {
             }
 
             if (options.closeInSeconds > 0) {
-                setTimeout(function(){
+                setTimeout(function () {
                     $('#' + id).remove();
                 }, options.closeInSeconds * 1000);
             }
