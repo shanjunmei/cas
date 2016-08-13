@@ -2,10 +2,7 @@ package com.ffzx.cas;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,6 +29,12 @@ public class UserLoginServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             String sessionId = request.getRequestedSessionId();
+            Cookie[] cookies=request.getCookies();
+            for (Cookie cookie :cookies){
+               String cookName= cookie.getName();
+               String cookValue= cookie.getValue();
+                System.out.println(cookName+" = "+cookValue);
+            }
             String clientSessionId = request.getParameter("ticket");
             String service = request.getParameter("service");
             String userName = request.getParameter("userName");
