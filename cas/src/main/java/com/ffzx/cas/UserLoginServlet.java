@@ -45,11 +45,11 @@ public class UserLoginServlet extends HttpServlet {
 
             //根据sessionId去redis去取对应的key
             //查询不到则执行登录流程
-            if (sessionId != null && !"".equals(sessionId)) {
+            if (!StringUtils.isBlank(sessionId)) {
                 //登录后当前的系统访问
                 SessionManager sessionManager = ApplicationContextHelper.getBean(SessionManager.class);
                 String auth = sessionManager.retrieveFromSession(SessionManager.SERVER_SESSION_KEY_PREFIX + sessionId);
-                if (auth != null) {
+                if (!StringUtils.isBlank(auth)) {
                     //上一次登录有效期还未过
                     System.out.println("last login has't expire");
                     service = urlParameterAdd(sessionId, service);
@@ -66,7 +66,7 @@ public class UserLoginServlet extends HttpServlet {
                 //登录后另外系统访问
             }*/
 
-            if (userName != null && !"".equals(userName)) {
+            if (!StringUtils.isBlank(userName)) {
                 //login
                 AuthManager authManager = ApplicationContextHelper.getBean(AuthManager.class);
                 if (authManager.validate(userName, password)) {
@@ -108,7 +108,7 @@ public class UserLoginServlet extends HttpServlet {
                 System.out.println(cookName + " = " + cookValue);
             }
         }
-        if(requireNew|sessionId==null||sessionId.equals("")){
+        if(requireNew|StringUtils.isBlank(sessionId)){
             sessionId= UUID.randomUUID().toString().replace("-","");
             Cookie cookie=new Cookie("server_session",sessionId);
 
