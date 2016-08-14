@@ -1,5 +1,7 @@
 package com.ffzx.cas;
 
+import com.ffzx.cas.support.StringUtils;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -7,6 +9,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.UUID;
 
 /**
  * Servlet implementation class UserLoginServlet
@@ -28,29 +31,32 @@ public class UserLoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String sessionId = request.getRequestedSessionId();
-            Cookie[] cookies=request.getCookies();
-            for (Cookie cookie :cookies){
-               String cookName= cookie.getName();
-               String cookValue= cookie.getValue();
-                System.out.println(cookName+" = "+cookValue);
-            }
-            String clientSessionId = request.getParameter("ticket");
+            String sessionId = getSessionId(request, response,false);
+
+           // String clientSessionId = request.getParameter("ticket");
             String service = request.getParameter("service");
+            if(StringUtils.isBlank(service)){
+                //FIXME
+                service="http://www.baidu.com";
+            }
             String userName = request.getParameter("userName");
             String password = request.getParameter("password");
 
 
             //根据sessionId去redis去取对应的key
             //查询不到则执行登录流程
-            if (sessionId!=null&&!"".equals(sessionId)){
+            if (sessionId != null && !"".equals(sessionId)) {
                 //登录后当前的系统访问
-                SessionManager sessionManager=ApplicationContextHelper.getBean(SessionManager.class);
-                String auth=sessionManager.retrieveFromSession(SessionManager.SERVER_SESSION_KEY_PREFIX+sessionId);
-                if(auth!=null){
+                SessionManager sessionManager = ApplicationContextHelper.getBean(SessionManager.class);
+                String auth = sessionManager.retrieveFromSession(SessionManager.SERVER_SESSION_KEY_PREFIX + sessionId);
+                if (auth != null) {
                     //上一次登录有效期还未过
                     System.out.println("last login has't expire");
-                }else{
+                    service = urlParameterAdd(sessionId, service);
+                    response.sendRedirect(service);
+                    System.out.println("redirect to:"+service);
+                    return;
+                } else {
                     //上一次登录有效期已过
                     System.out.println("last login had expire");
                 }
@@ -60,47 +66,55 @@ public class UserLoginServlet extends HttpServlet {
                 //登录后另外系统访问
             }*/
 
-            if(userName!=null&&!"".equals(userName)) {
+            if (userName != null && !"".equals(userName)) {
                 //login
-                AuthManager authManager=ApplicationContextHelper.getBean(AuthManager.class);
-               if(authManager.validate(userName,password)){
-                   HttpSession session=request.getSession(true);
-                   sessionId=session.getId();
-                   SessionManager sessionManager=ApplicationContextHelper.getBean(SessionManager.class);
-                   sessionManager.putSession(SessionManager.SERVER_SESSION_KEY_PREFIX+sessionId,userName);
-                   if(clientSessionId!=null){
-                           sessionManager.putSession(SessionManager.CLIENT_SESSION_KEY_PREFIX+clientSessionId,userName);
-                   }
-                   System.out.println("login success");
+                AuthManager authManager = ApplicationContextHelper.getBean(AuthManager.class);
+                if (authManager.validate(userName, password)) {
+                   // sessionId=getSessionId(request,response,true);
+                    SessionManager sessionManager = ApplicationContextHelper.getBean(SessionManager.class);
+                    sessionManager.putSession(SessionManager.SERVER_SESSION_KEY_PREFIX + sessionId, userName);
+                   /* if (clientSessionId != null) {
+                        sessionManager.putSession(SessionManager.CLIENT_SESSION_KEY_PREFIX + clientSessionId, userName);
+                    }*/
+                    System.out.println("login success");
                     //redirect to service;
-               }else {
-                   System.out.println("login fail");
+                } else {
+                    System.out.println("login fail");
                     //redirect current page
-               }
+                }
             }
 
-            response.setContentType("text/html; charset=utf-8");
-            javax.naming.Context ctx = new javax.naming.InitialContext();
-            javax.sql.DataSource ds = (javax.sql.DataSource) ctx.lookup("java:/comp/env/jdbc/pms_db");
-
-            Connection conn = ds.getConnection();
-            PreparedStatement pst = conn.prepareStatement("SELECT * FROM sys_user");
-            ResultSet rs = pst.executeQuery();
-            StringBuilder table = new StringBuilder();
-            table.append("<table border='1'>");
-            table.append("<tr><td>eg-name</td><td>ch-name</td></tr>");
-            while (rs.next()) {
-                table.append("<tr><td>" + rs.getString("id") + "</td><td>");
-                table.append(rs.getString("name") + "</td></tr>");
-            }
-            table.append("</table>");
-            response.getWriter().append(table.toString());
-            pst.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // response.getWriter().append("Served at:
-        // ").append(request.getContextPath());
+        response.getWriter().append("Served at:").append(request.getContextPath());
+    }
+
+    private String urlParameterAdd(String sessionId, String service) {
+        service=service+"?ticket="+sessionId;
+        return service;
+    }
+
+    private String getSessionId(HttpServletRequest request, HttpServletResponse response,boolean requireNew) {
+        String sessionId = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                String cookName = cookie.getName();
+                String cookValue = cookie.getValue();
+                if(cookName.equals("server_session")){
+                    sessionId=cookValue;
+                }
+                System.out.println(cookName + " = " + cookValue);
+            }
+        }
+        if(requireNew|sessionId==null||sessionId.equals("")){
+            sessionId= UUID.randomUUID().toString().replace("-","");
+            Cookie cookie=new Cookie("server_session",sessionId);
+
+            response.addCookie(cookie);
+        }
+        return sessionId;
     }
 
     /**
@@ -109,7 +123,7 @@ public class UserLoginServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // TODO Auto-generated method stub
+
         doGet(request, response);
     }
 
