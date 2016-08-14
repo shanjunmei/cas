@@ -53,7 +53,7 @@ public class UserLoginServlet extends HttpServlet {
                     //上一次登录有效期还未过
                     System.out.println("last login has't expire");
                     service = urlParameterAdd(sessionId, service);
-                    response.sendRedirect(service);
+                   // response.sendRedirect(service);
                     System.out.println("redirect to:"+service);
                     return;
                 } else {
