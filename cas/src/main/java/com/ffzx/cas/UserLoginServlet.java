@@ -1,5 +1,6 @@
 package com.ffzx.cas;
 
+import com.ffzx.cas.support.PropertiesLoader;
 import com.ffzx.cas.support.StringUtils;
 
 import javax.servlet.ServletException;
@@ -37,8 +38,18 @@ public class UserLoginServlet extends HttpServlet {
             String service = request.getParameter("service");
             if(StringUtils.isBlank(service)){
                 //FIXME
-                service="http://www.baidu.com";
+                service= PropertiesLoader.getProperty("cas.base")+"/login";
+            }else{
+               String uri= request.getRequestURI();
+                StringBuffer url=request.getRequestURL();
+                System.out.println("uri ="+uri);
+                System.out.println("url ="+url);
             }
+            String uri= request.getRequestURI();
+            StringBuffer url=request.getRequestURL();
+            System.out.println("uri ="+uri);
+            System.out.println("url ="+url);
+
             String userName = request.getParameter("userName");
             String password = request.getParameter("password");
 
