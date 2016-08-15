@@ -70,7 +70,7 @@ public class UserLoginServlet extends HttpServlet {
                     return;
                 } else {
                     //上一次登录有效期已过
-                	response.sendRedirect(PropertiesLoader.getProperty("cas.base")+"/login.jsp?service"+service);
+                	response.sendRedirect(PropertiesLoader.getProperty("cas.base")+"/login.jsp?service="+service);
                     System.out.println("last login had expire");
                 }
             }
