@@ -1,16 +1,17 @@
 package com.ffzx.cas;
 
-import com.ffzx.cas.support.PropertiesLoader;
-import com.ffzx.cas.support.StringUtils;
+import java.io.IOException;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.UUID;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.ffzx.cas.support.PropertiesLoader;
+import com.ffzx.cas.support.StringUtils;
 
 /**
  * Servlet implementation class UserLoginServlet
@@ -38,7 +39,7 @@ public class UserLoginServlet extends HttpServlet {
             String service = request.getParameter("service");
             if(StringUtils.isBlank(service)){
                 //FIXME
-                service= PropertiesLoader.getProperty("cas.base")+"/login";
+               // service= PropertiesLoader.getProperty("cas.base")+"/login";
             }else{
                String uri= request.getRequestURI();
                 StringBuffer url=request.getRequestURL();
@@ -69,6 +70,7 @@ public class UserLoginServlet extends HttpServlet {
                     return;
                 } else {
                     //上一次登录有效期已过
+                	response.sendRedirect(PropertiesLoader.getProperty("cas.base")+"/login.jsp?service"+service);
                     System.out.println("last login had expire");
                 }
             }
@@ -89,6 +91,8 @@ public class UserLoginServlet extends HttpServlet {
                     }*/
                     System.out.println("login success");
                     //redirect to service;
+                    response.sendRedirect(service);
+                    return;
                 } else {
                     System.out.println("login fail");
                     //redirect current page
