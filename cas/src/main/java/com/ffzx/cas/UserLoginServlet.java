@@ -33,7 +33,8 @@ public class UserLoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String sessionId = getSessionId(request, response,false);
+
+        	String sessionId = getSessionId(request, response,false);
 
            // String clientSessionId = request.getParameter("ticket");
             String service = request.getParameter("service");
@@ -70,8 +71,13 @@ public class UserLoginServlet extends HttpServlet {
                     return;
                 } else {
                     //上一次登录有效期已过
-                	response.sendRedirect(PropertiesLoader.getProperty("cas.base")+"/login.jsp?service="+service);
+                	String redirectUrl=PropertiesLoader.getProperty("cas.base")+"/login.jsp";
+                	if(StringUtils.isNotBlank(service)){
+                		redirectUrl=redirectUrl+"?service="+service;
+                	}
+                	response.sendRedirect(redirectUrl);
                     System.out.println("last login had expire");
+                    return;
                 }
             }
 
