@@ -19,7 +19,7 @@ public class AuthManagerImpl implements AuthManager {
 
     @Override
     public boolean validate(String userName, String password) {
-        int count = databaseManager.count("select count(1) from sys_user where name='" + userName + "' and password='" + password + "'");
+        int count = databaseManager.count("select count(1) from sys_user where login_name='" + userName + "' and password='" + password + "'");
         return count > 0;
     }
 }

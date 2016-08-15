@@ -113,7 +113,7 @@ public class UserLoginServlet extends HttpServlet {
             for (Cookie cookie : cookies) {
                 String cookName = cookie.getName();
                 String cookValue = cookie.getValue();
-                if(cookName.equals("server_session")){
+                if(SessionManager.CLIENT_SESSION_KEY.equals(cookName)){
                     sessionId=cookValue;
                 }
                 System.out.println(cookName + " = " + cookValue);
@@ -121,7 +121,7 @@ public class UserLoginServlet extends HttpServlet {
         }
         if(requireNew|StringUtils.isBlank(sessionId)){
             sessionId= UUID.randomUUID().toString().replace("-","");
-            Cookie cookie=new Cookie("server_session",sessionId);
+            Cookie cookie=new Cookie(SessionManager.CLIENT_SESSION_KEY,sessionId);
 
             response.addCookie(cookie);
         }
