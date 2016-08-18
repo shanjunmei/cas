@@ -71,13 +71,32 @@ public class UserLoginServlet extends HttpServlet {
                     return;
                 } else {
                     //上一次登录有效期已过
+                    if (!StringUtils.isBlank(userName)) {
+                        //login
+                        AuthManager authManager = ApplicationContextHelper.getBean(AuthManager.class);
+                        if (authManager.validate(userName, password)) {
+                            // sessionId=getSessionId(request,response,true);
+
+                            sessionManager.putSession(SessionManager.SERVER_SESSION_KEY_PREFIX + sessionId, userName);
+                   /* if (clientSessionId != null) {
+                        sessionManager.putSession(SessionManager.CLIENT_SESSION_KEY_PREFIX + clientSessionId, userName);
+                    }*/
+                            System.out.println("login success");
+                            //redirect to service;
+                            response.sendRedirect(service);
+                            return;
+                        } else {
+                            System.out.println("login fail");
+                            //redirect current page
+                        }
+                    }else{
                 	String redirectUrl=PropertiesLoader.getProperty("cas.base")+"/login.jsp";
                 	if(StringUtils.isNotBlank(service)){
                 		redirectUrl=redirectUrl+"?service="+service;
                 	}
                 	response.sendRedirect(redirectUrl);
                     System.out.println("last login had expire");
-                    return;
+                    return;}
                 }
             }
 
@@ -85,25 +104,7 @@ public class UserLoginServlet extends HttpServlet {
                 //登录后另外系统访问
             }*/
 
-            if (!StringUtils.isBlank(userName)) {
-                //login
-                AuthManager authManager = ApplicationContextHelper.getBean(AuthManager.class);
-                if (authManager.validate(userName, password)) {
-                   // sessionId=getSessionId(request,response,true);
-                    SessionManager sessionManager = ApplicationContextHelper.getBean(SessionManager.class);
-                    sessionManager.putSession(SessionManager.SERVER_SESSION_KEY_PREFIX + sessionId, userName);
-                   /* if (clientSessionId != null) {
-                        sessionManager.putSession(SessionManager.CLIENT_SESSION_KEY_PREFIX + clientSessionId, userName);
-                    }*/
-                    System.out.println("login success");
-                    //redirect to service;
-                    response.sendRedirect(service);
-                    return;
-                } else {
-                    System.out.println("login fail");
-                    //redirect current page
-                }
-            }
+
 
         } catch (Exception e) {
             e.printStackTrace();
